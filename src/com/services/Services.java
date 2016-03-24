@@ -89,7 +89,7 @@ public class Services {
 	@Path("/unfollow")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String unfollow(@FormParam("UserID1") Integer userID1,@FormParam("UserID2") Integer userID2,@FormParam("UserName1") String username1 ,@FormParam("UserName2") String username2) {
-		Boolean status = UserModel.Follow(userID1, userID2,username1,username2);
+		Boolean status = UserModel.UnFollow(userID1, userID2, username1, username2);
 		JSONObject json = new JSONObject();
 		json.put("status", status ? 1 : 0);
 		return json.toJSONString();

@@ -161,17 +161,17 @@ public class UserModel {
 		return false;
 	}
 
-	public static Boolean UnFollow(Integer userid1, Integer userid2 , Integer username1 , Integer username2) {
+	public static Boolean UnFollow(Integer userid1, Integer userid2 , String username1 , String username2) {
 		try {
 			Connection conn = DBConnection.getActiveConnection();
-			String sql = "Delete from f (`UserID1`,`UserID2`,`UserName1`,`UserName2`) values(?,?,?,?)";
+			String sql = "Delete from f where `UserID1`=? and`UserID2`=? and `UserName1`=? and `UserName2`=?";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
 
 			stmt.setInt(1, userid1);
 			stmt.setInt(2, userid2);
-			stmt.setInt(3, username1);
-			stmt.setInt(4, username2);
+			stmt.setString(3, username1);
+			stmt.setString(4, username2);
 			stmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -186,16 +186,14 @@ public class UserModel {
 		try {
 
 			Connection conn = DBConnection.getActiveConnection();
-
-			String sql = "Select * from f  where UserID1 = ";
-				
-
+			String sql = "Select * from f  where `UserID1` =? and `UserName1` =? ";
 			PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, userid1);
+			stmt.setString(2, UserName1);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Following.add(rs.getString("UserName2"));
-
 			}
 
 		} catch (SQLException e) {
@@ -209,25 +207,18 @@ public class UserModel {
 			try {
 			
 			Connection conn = DBConnection.getActiveConnection();
-			String sqll = "Select lat , long from users where `id` = ?";
+			String sqll = "Select `long` , `lat` from users where `id` = ?";
 
 		   
 			PreparedStatement stmt;
 	    	stmt = conn.prepareStatement(sqll);
 			stmt.setInt(1, id);
 			ResultSet rs = stmt.executeQuery();
-			int userid1 = 0 ;
-			
-		/*	if (rs.next()) {
-				userid1 = rs.getInt("id");
-			}*/
 		    String temp ;
 			
 			rs = stmt.executeQuery();
 			if(rs.next()){
-			       UserModel user = new UserModel();
-			       user.id = rs.getInt(1);
-			        temp= rs.getString("lat") + rs.getString("long");
+			        temp= rs.getString("long") + rs.getString("lat");
 				   return temp;
 			}
 			
